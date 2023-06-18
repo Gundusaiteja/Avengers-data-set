@@ -1,0 +1,83 @@
+---
+title: "Assignment2"
+author: "Gundu Sai Teja"
+date: "2023-06-18"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r , echo=FALSE}
+# Section 1: Description of the data.
+
+#   The data set which is used in this script is avengers data set, The data set contains information about avengers characters.The data measures attributes such as Name/Alias,Current?,Gender,Full/Reserve Avengers Intro as well as other details related to their involvement with the avengers. Sources for the data set likely included comic books, publications, and other online sources.
+
+#   The data set is saved in CSV file. This file allows easy to import and export of data into other tools and programming languages. The Avengers dataset is often presented as a flat file in a delimited format as opposed to a fixed-width format. The data set columns are separated by different delimiter character like comma,semicolon,tabs or other selected delimiter.
+
+cran_mirror <- "https://cran.r-project.org"
+# Set the CRAN mirror
+options(repos = cran_mirror)
+
+install.packages("readr")
+library(readr)
+install.packages("dplyr")
+library(dplyr)
+install.packages("knitr")
+library(knitr)
+
+# 2: Reading the data into R
+
+#To read the avengers data set is read.csv()`s
+
+avenger_data_set <- readr::read_csv("C:/Users/Saite/OneDrive/Documents/avengers.csv" , show_col_types = FALSE)
+
+```
+
+```{r clean the data , echo=False}
+
+#Section 3 : Clean the data
+
+# Renaming columns
+avenger_data_set2 <- dplyr::rename(avenger_data_set, 'Name' = 'Name/Alias', 'gender' = 'Gender', 'Avengers_intro' = 'Full/Reserve Avengers Intro', 'Current' = 'Current?')
+
+# Subset to keep selected columns
+avenger_data_set3 <- dplyr::select(avenger_data_set2, Name, gender, Avengers_intro, Current)
+
+```
+
+```{r characteristics of data , echo=FALSE}
+
+# Section 4: Characteristics of the data
+
+# Display number of rows and columns
+cat("This dataframe has", nrow(avenger_data_set3), "rows and", ncol(avenger_data_set3), "columns.")
+
+# Create a table with column names and descriptions
+characteristics_table <- data.frame(Column = colnames(avenger_data_set3), Description = c("Name of the avengers characters", "Gender of the character", "Date of full or reserve Avengers introduction","Indicates if the character is currently active"))
+
+# Display the table
+knitr::kable(characteristics_table, format = "markdown")
+
+```
+
+```{r summary , echo=FALSE}
+
+# Section 5: Summary statistics
+
+# Pick three columns for summary statistics
+subset_avengers <- avenger_data_set2[, c("Name", "gender", "Avengers_intro","Current")]
+
+# Calculate summary statistics
+summary_stats <- summary(subset_avengers, na.rm = TRUE)
+
+# Assign summary to a new object
+summary_table <- as.data.frame(summary_stats)
+
+# Display the summary table
+summary_table
+
+```
+
